@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fun Stream - Bollywood Entertainment</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; }
+    .bebas { font-family: 'Bebas Neue', sans-serif; }
+    
+    .glassmorphism {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .content-row {
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .content-row::-webkit-scrollbar { display: none; }
+    
+    .poster-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+    .poster-card:hover {
+      transform: scale(1.08);
+      z-index: 10;
+    }
+    
+    .hero-gradient {
+      background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 50%, transparent 100%),
+                  linear-gradient(to top, #0a0a0a 0%, transparent 50%);
+    }
+    
+    .category-gradient {
+      background: linear-gradient(to top, rgba(10,10,10,1) 0%, transparent 100%);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
+    .animate-slideIn { animation: slideIn 0.5s ease-out forwards; }
+    
+    .glow-text {
+      text-shadow: 0 0 40px rgba(229, 62, 62, 0.5);
+    }
+    
+    .nav-blur {
+      background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 70%, transparent 100%);
+    }
+    
+    .input-glass {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.3s ease;
+    }
+    .input-glass:focus {
+      background: rgba(255,255,255,0.12);
+      border-color: #e53e3e;
+      outline: none;
+      box-shadow: 0 0 20px rgba(229,62,62,0.3);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(229,62,62,0.4);
+    }
+    
+    .poster-overlay {
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
+    }
+    
+    .shimmer {
+      background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+</head>
+<body class="h-full bg-[#0a0a0a] text-white overflow-auto">
+  
+  <!-- Auth Page -->
+  <div id="authPage" class="min-h-full w-full relative">
+    <!-- Background -->
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-gradient-to-br from-red-900/30 via-black to-purple-900/20"></div>
+      <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.02&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    </div>
+    
+    <!-- Auth Content -->
+    <div class="relative z-10 min-h-full flex flex-col">
+      <!-- Logo -->
+      <div class="p-6 md:p-8">
+        <h1 id="authLogo" class="bebas text-4xl md:text-5xl text-red-500 glow-text tracking-wider">FUN STREAM</h1>
+      </div>
+      
+      <!-- Auth Form Container -->
+      <div class="flex-1 flex items-center justify-center p-4 pb-12">
+        <div class="glassmorphism rounded-2xl p-8 md:p-10 w-full max-w-md animate-fadeIn">
+          <h2 id="authTitle" class="text-2xl md:text-3xl font-bold mb-2">Welcome Back</h2>
+          <p id="authSubtitle" class="text-gray-400 mb-8">Sign in to continue watching</p>
+          
+          <!-- Login Form -->
+          <div id="loginForm">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-300 mb-2">Email</label>
+                <input type="email" id="loginEmail" placeholder="Enter your email" 
+                  class="w-full px-4 py-3 rounded-xl input-glass text-white placeholder-gray-500">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-300 mb-2">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" 
+                  class="w-full px-4 py-3 rounded-xl input-glass text-white placeholder-gray-500">
+              </div>
+            </div>
+            <button id="loginBtn" class="w-full mt-6 py-3 rounded-xl btn-primary font-semibold text-lg">
+              Sign In
+            </button>
+            <p class="text-center mt-6 text-gray-400">
+              New to Fun Stream? 
+              <button id="showRegister" class="text-red-400 hover:text-red-300 font-medium ml-1">Sign Up</button>
+            </p>
+          </div>
+          
+          <!-- Register Form -->
+          <div id="registerForm" class="hidden">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-300 mb-2">Full Name</label>
+                <input type="text" id="registerName" placeholder="Enter your name" 
+                  class="w-full px-4 py-3 rounded-xl input-glass text-white placeholder-gray-500">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-300 mb-2">Email</label>
+                <input type="email" id="registerEmail" placeholder="Enter your email" 
+                  class="w-full px-4 py-3 rounded-xl input-glass text-white placeholder-gray-500">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-300 mb-2">Password</label>
+                <input type="password" id="registerPassword" placeholder="Create a password" 
+                  class="w-full px-4 py-3 rounded-xl input-glass text-white placeholder-gray-500">
+              </div>
+            </div>
+            <button id="registerBtn" class="w-full mt-6 py-3 rounded-xl btn-primary font-semibold text-lg">
+              Create Account
+            </button>
+            <p class="text-center mt-6 text-gray-400">
+              Already have an account? 
+              <button id="showLogin" class="text-red-400 hover:text-red-300 font-medium ml-1">Sign In</button>
+            </p>
+          </div>
+          
+          <!-- Error Message -->
+          <div id="authError" class="hidden mt-4 p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-300 text-sm"></div>
+          
+          <!-- Success Message -->
+          <div id="authSuccess" class="hidden mt-4 p-3 rounded-lg bg-green-500/20 border border-green-500/50 text-green-300 text-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Dashboard Page -->
+  <div id="dashboardPage" class="hidden min-h-full w-full">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 nav-blur">
+      <div class="flex items-center justify-between px-4 md:px-8 py-4">
+        <div class="flex items-center gap-8">
+          <h1 id="navLogo" class="bebas text-3xl md:text-4xl text-red-500 glow-text tracking-wider">FUN STREAM</h1>
+          <div class="hidden md:flex items-center gap-6">
+            <button class="nav-link text-white font-medium hover:text-red-400 transition-colors">Home</button>
+            <button class="nav-link text-gray-400 hover:text-white transition-colors">Movies</button>
+            <button class="nav-link text-gray-400 hover:text-white transition-colors">Web Series</button>
+            <button class="nav-link text-gray-400 hover:text-white transition-colors">Reality Shows</button>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="p-2 hover:bg-white/10 rounded-full transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </button>
+          <button class="p-2 hover:bg-white/10 rounded-full transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+          </button>
+          <div class="flex items-center gap-3">
+            <span id="userName" class="hidden md:block text-sm"></span>
+            <button id="logoutBtn" class="w-9 h-9 rounded-full bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center font-bold text-sm hover:scale-110 transition-transform">
+              <span id="userInitial">U</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="heroSection" class="relative h-[600px] md:h-[700px]">
+      <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent z-10"></div>
+      <div id="heroBackground" class="absolute inset-0 bg-cover bg-center bg-gray-900"></div>
+      <div class="relative z-20 h-full flex items-center px-4 md:px-12 pt-16">
+        <div class="max-w-2xl animate-slideIn">
+          <span class="inline-block px-3 py-1 bg-red-600 text-sm font-semibold rounded mb-4">FEATURED</span>
+          <h2 id="heroTitle" class="bebas text-5xl md:text-7xl lg:text-8xl leading-none mb-4">Pathaan</h2>
+          <p id="heroDesc" class="text-gray-300 text-sm md:text-base mb-6 line-clamp-3">An Indian spy takes on the leader of a group of mercenaries who have nefarious plans to target his homeland.</p>
+          <div class="flex items-center gap-4 mb-6">
+            <span class="text-green-400 font-semibold">98% Match</span>
+            <span class="text-gray-400">2023</span>
+            <span class="px-2 py-0.5 border border-gray-500 text-xs">U/A 16+</span>
+            <span class="text-gray-400">2h 26m</span>
+          </div>
+          <div class="flex gap-3">
+            <button class="flex items-center gap-2 px-6 py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              Play
+            </button>
+            <button class="flex items-center gap-2 px-6 py-3 bg-gray-600/80 font-semibold rounded-lg hover:bg-gray-600 transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              More Info
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Content Sections -->
+    <main class="relative z-20 px-4 md:px-8 -mt-20 pb-12 space-y-8">
+      <!-- Trending Now -->
+      <section class="animate-fadeIn" style="animation-delay: 0.1s">
+        <h3 class="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2">
+          <span class="text-red-500">🔥</span> Trending Now
+        </h3>
+        <div id="trendingRow" class="content-row flex gap-3 pb-4"></div>
+      </section>
+      
+      <!-- Bollywood Blockbusters -->
+      <section class="animate-fadeIn" style="animation-delay: 0.2s">
+        <h3 class="text-xl md:text-2xl font-bold mb-4">Bollywood Blockbusters</h3>
+        <div id="bollywoodRow" class="content-row flex gap-3 pb-4"></div>
+      </section>
+      
+      <!-- Web Series -->
+      <section class="animate-fadeIn" style="animation-delay: 0.3s">
+        <h3 class="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2">
+          <span>📺</span> Popular Web Series
+        </h3>
+        <div id="webSeriesRow" class="content-row flex gap-3 pb-4"></div>
+      </section>
+      
+      <!-- Reality Shows -->
+      <section class="animate-fadeIn" style="animation-delay: 0.4s">
+        <h3 class="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2">
+          <span>⭐</span> Reality Shows
+        </h3>
+        <div id="realityRow" class="content-row flex gap-3 pb-4"></div>
+      </section>
+      
+      <!-- Action Movies -->
+      <section class="animate-fadeIn" style="animation-delay: 0.5s">
+        <h3 class="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2">
+          <span>💥</span> Action Packed
+        </h3>
+        <div id="actionRow" class="content-row flex gap-3 pb-4"></div>
+      </section>
+      
+      <!-- Romance -->
+      <section class="animate-fadeIn" style="animation-delay: 0.6s">
+        <h3 class="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2">
+          <span>❤️</span> Romantic Hits
+        </h3>
+        <div id="romanceRow" class="content-row flex gap-3 pb-4"></div>
+      </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="px-4 md:px-8 py-8 border-t border-gray-800">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex flex-wrap gap-8 mb-8">
+          <div>
+            <h4 class="font-semibold mb-3">Company</h4>
+            <ul class="space-y-2 text-gray-400 text-sm">
+              <li><a href="#" class="hover:text-white">About Us</a></li>
+              <li><a href="#" class="hover:text-white">Careers</a></li>
+              <li><a href="#" class="hover:text-white">Press</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-3">Support</h4>
+            <ul class="space-y-2 text-gray-400 text-sm">
+              <li><a href="#" class="hover:text-white">Help Center</a></li>
+              <li><a href="#" class="hover:text-white">Contact Us</a></li>
+              <li><a href="#" class="hover:text-white">FAQ</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-3">Legal</h4>
+            <ul class="space-y-2 text-gray-400 text-sm">
+              <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+              <li><a href="#" class="hover:text-white">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-white">Cookie Preferences</a></li>
+            </ul>
+          </div>
+        </div>
+        <p id="footerText" class="text-gray-500 text-sm">© 2024 Fun Stream. All rights reserved. Your gateway to Bollywood entertainment.</p>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- Movie Modal -->
+  <div id="movieModal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/90" onclick="closeModal()"></div>
+    <div class="relative z-10 max-w-4xl mx-auto mt-12 md:mt-20 mx-4 glassmorphism rounded-2xl overflow-hidden animate-fadeIn">
+      <button onclick="closeModal()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/50 flex items-center justify-center hover:bg-black/70 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <div id="modalBackdrop" class="h-64 md:h-80 bg-cover bg-center relative">
+        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+      </div>
+      <div class="p-6 md:p-8 -mt-20 relative">
+        <div class="flex gap-4 mb-4">
+          <button class="flex items-center gap-2 px-6 py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            Play
+          </button>
+          <button class="w-12 h-12 rounded-full border-2 border-gray-400 flex items-center justify-center hover:border-white transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          </button>
+          <button class="w-12 h-12 rounded-full border-2 border-gray-400 flex items-center justify-center hover:border-white transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
+          </button>
+        </div>
+        <h2 id="modalTitle" class="bebas text-4xl md:text-5xl mb-3"></h2>
+        <div class="flex items-center gap-4 mb-4 text-sm">
+          <span id="modalMatch" class="text-green-400 font-semibold"></span>
+          <span id="modalYear" class="text-gray-400"></span>
+          <span id="modalRating" class="px-2 py-0.5 border border-gray-500 text-xs"></span>
+        </div>
+        <p id="modalDesc" class="text-gray-300 leading-relaxed"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // TMDB API - Free tier with read access
+    const TMDB_API_KEY = '2dca580c2a14b55200e784d157207b4d';
+    const TMDB_BASE = 'https://api.themoviedb.org/3';
+    const IMG_BASE = 'https://image.tmdb.org/t/p';
+    
+    // App State
+    let currentUser = null;
+    let users = [];
+    
+    // Default config
+    const defaultConfig = {
+      app_title: 'FUN STREAM',
+      tagline: 'Your gateway to Bollywood entertainment.',
+      primary_color: '#e53e3e',
+      secondary_color: '#0a0a0a',
+      text_color: '#ffffff',
+      accent_color: '#c53030',
+      surface_color: '#1a1a1a'
+    };
+    
+    // Data handler for user persistence
+    const dataHandler = {
+      onDataChanged(data) {
+        users = data;
+      }
+    };
+    
+    // Initialize SDKs
+    async function initApp() {
+      // Initialize Element SDK
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (config) => {
+            const title = config.app_title || defaultConfig.app_title;
+            const tagline = config.tagline || defaultConfig.tagline;
+            
+            document.getElementById('authLogo').textContent = title;
+            document.getElementById('navLogo').textContent = title;
+            document.getElementById('footerText').textContent = `© 2024 ${title}. All rights reserved. ${tagline}`;
+            document.title = `${title} - Bollywood Entertainment`;
+          },
+          mapToCapabilities: (config) => ({
+            recolorables: [
+              {
+                get: () => config.secondary_color || defaultConfig.secondary_color,
+                set: (v) => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
+              },
+              {
+                get: () => config.surface_color || defaultConfig.surface_color,
+                set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); }
+              },
+              {
+                get: () => config.text_color || defaultConfig.text_color,
+                set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+              },
+              {
+                get: () => config.primary_color || defaultConfig.primary_color,
+                set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
+              },
+              {
+                get: () => config.accent_color || defaultConfig.accent_color,
+                set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }
+              }
+            ],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ['app_title', config.app_title || defaultConfig.app_title],
+            ['tagline', config.tagline || defaultConfig.tagline]
+          ])
+        });
+      }
+      
+      // Initialize Data SDK
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize Data SDK');
+        }
+      }
+      
+      // Setup event listeners
+      setupAuthListeners();
+      
+      // Check for stored session
+      const storedUser = sessionStorage.getItem('funStreamUser');
+      if (storedUser) {
+        currentUser = JSON.parse(storedUser);
+        showDashboard();
+      }
+    }
+    
+    // Auth Functions
+    function setupAuthListeners() {
+      document.getElementById('showRegister').addEventListener('click', () => {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.remove('hidden');
+        document.getElementById('authTitle').textContent = 'Create Account';
+        document.getElementById('authSubtitle').textContent = 'Start your entertainment journey';
+        hideMessages();
+      });
+      
+      document.getElementById('showLogin').addEventListener('click', () => {
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('authTitle').textContent = 'Welcome Back';
+        document.getElementById('authSubtitle').textContent = 'Sign in to continue watching';
+        hideMessages();
+      });
+      
+      document.getElementById('loginBtn').addEventListener('click', handleLogin);
+      document.getElementById('registerBtn').addEventListener('click', handleRegister);
+      document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    }
+    
+    async function handleLogin() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      
+      hideMessages();
+      
+      if (!email || !password) {
+        showError('Please fill in all fields');
+        return;
+      }
+      
+      const user = users.find(u => u.email === email && u.password === password);
+      
+      if (user) {
+        currentUser = user;
+        sessionStorage.setItem('funStreamUser', JSON.stringify(user));
+        showSuccess('Login successful! Redirecting...');
+        setTimeout(() => showDashboard(), 1000);
+      } else {
+        showError('Invalid email or password');
+      }
+    }
+    
+    async function handleRegister() {
+      const name = document.getElementById('registerName').value.trim();
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value;
+      
+      hideMessages();
+      
+      if (!name || !email || !password) {
+        showError('Please fill in all fields');
+        return;
+      }
+      
+      if (password.length < 6) {
+        showError('Password must be at least 6 characters');
+        return;
+      }
+      
+      if (users.find(u => u.email === email)) {
+        showError('An account with this email already exists');
+        return;
+      }
+      
+      if (users.length >= 999) {
+        showError('Maximum user limit reached');
+        return;
+      }
+      
+      const btn = document.getElementById('registerBtn');
+      btn.disabled = true;
+      btn.textContent = 'Creating...';
+      
+      const newUser = {
+        name,
+        email,
+        password,
+        createdAt: new Date().toISOString()
+      };
+      
+      if (window.dataSdk) {
+        const result = await window.dataSdk.create(newUser);
+        if (result.isOk) {
+          currentUser = newUser;
+          sessionStorage.setItem('funStreamUser', JSON.stringify(newUser));
+          showSuccess('Account created! Redirecting...');
+          setTimeout(() => showDashboard(), 1000);
+        } else {
+          showError('Failed to create account. Please try again.');
+        }
+      } else {
+        currentUser = newUser;
+        sessionStorage.setItem('funStreamUser', JSON.stringify(newUser));
+        showSuccess('Account created! Redirecting...');
+        setTimeout(() => showDashboard(), 1000);
+      }
+      
+      btn.disabled = false;
+      btn.textContent = 'Create Account';
+    }
+    
+    function handleLogout() {
+      currentUser = null;
+      sessionStorage.removeItem('funStreamUser');
+      document.getElementById('dashboardPage').classList.add('hidden');
+      document.getElementById('authPage').classList.remove('hidden');
+      document.getElementById('loginEmail').value = '';
+      document.getElementById('loginPassword').value = '';
+    }
+    
+    function showError(msg) {
+      const el = document.getElementById('authError');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+    
+    function showSuccess(msg) {
+      const el = document.getElementById('authSuccess');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+    
+    function hideMessages() {
+      document.getElementById('authError').classList.add('hidden');
+      document.getElementById('authSuccess').classList.add('hidden');
+    }
+    
+    // Dashboard Functions
+    async function showDashboard() {
+      document.getElementById('authPage').classList.add('hidden');
+      document.getElementById('dashboardPage').classList.remove('hidden');
+      
+      if (currentUser) {
+        document.getElementById('userName').textContent = currentUser.name;
+        document.getElementById('userInitial').textContent = currentUser.name.charAt(0).toUpperCase();
+      }
+      
+      // Load content
+      await loadContent();
+    }
+    
+    // TMDB API Functions
+    async function fetchTMDB(endpoint) {
+      try {
+        const res = await fetch(`${TMDB_BASE}${endpoint}?api_key=${TMDB_API_KEY}&language=en-US`);
+        const data = await res.json();
+        return data.results || [];
+      } catch (err) {
+        console.error('TMDB fetch error:', err);
+        return [];
+      }
+    }
+    
+    async function fetchBollywood(page = 1) {
+      try {
+        const res = await fetch(`${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=${page}`);
+        const data = await res.json();
+        return data.results || [];
+      } catch (err) {
+        console.error('Bollywood fetch error:', err);
+        return [];
+      }
+    }
+    
+    async function fetchIndianSeries() {
+      try {
+        const res = await fetch(`${TMDB_BASE}/discover/tv?api_key=${TMDB_API_KEY}&with_original_language=hi&sort_by=popularity.desc`);
+        const data = await res.json();
+        return data.results || [];
+      } catch (err) {
+        console.error('Series fetch error:', err);
+        return [];
+      }
+    }
+    
+    async function fetchReality() {
+      try {
+        const res = await fetch(`${TMDB_BASE}/discover/tv?api_key=${TMDB_API_KEY}&with_genres=10764&sort_by=popularity.desc`);
+        const data = await res.json();
+        return data.results || [];
+      } catch (err) {
+        console.error('Reality fetch error:', err);
+        return [];
+      }
+    }
+    
+    async function fetchGenre(genreId) {
+      try {
+        const res = await fetch(`${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=hi&with_genres=${genreId}&sort_by=popularity.desc`);
+        const data = await res.json();
+        return data.results || [];
+      } catch (err) {
+        console.error('Genre fetch error:', err);
+        return [];
+      }
+    }
+    
+    // Content Loading
+    async function loadContent() {
+      // Show loading skeletons
+      const rows = ['trendingRow', 'bollywoodRow', 'webSeriesRow', 'realityRow', 'actionRow', 'romanceRow'];
+      rows.forEach(id => {
+        const row = document.getElementById(id);
+        row.innerHTML = Array(8).fill(0).map(() => `
+          <div class="shimmer w-36 md:w-44 h-52 md:h-64 rounded-xl flex-shrink-0"></div>
+        `).join('');
+      });
+      
+      // Fetch all content
+      const [trending, bollywood, series, reality, action, romance] = await Promise.all([
+        fetchBollywood(1),
+        fetchBollywood(2),
+        fetchIndianSeries(),
+        fetchReality(),
+        fetchGenre(28), // Action
+        fetchGenre(10749) // Romance
+      ]);
+      
+      // Set hero
+      if (trending.length > 0) {
+        const hero = trending[0];
+        const backdrop = hero.backdrop_path ? `${IMG_BASE}/original${hero.backdrop_path}` : '';
+        if (backdrop) {
+          document.getElementById('heroBackground').style.backgroundImage = `url(${backdrop})`;
+        }
+        document.getElementById('heroTitle').textContent = hero.title || hero.name || 'Featured';
+        document.getElementById('heroDesc').textContent = hero.overview || '';
+      }
+      
+      // Render rows
+      renderRow('trendingRow', trending);
+      renderRow('bollywoodRow', bollywood);
+      renderRow('webSeriesRow', series, true);
+      renderRow('realityRow', reality, true);
+      renderRow('actionRow', action);
+      renderRow('romanceRow', romance);
+    }
+    
+    function renderRow(rowId, items, isTV = false) {
+      const row = document.getElementById(rowId);
+      
+      if (!items || items.length === 0) {
+        row.innerHTML = '<p class="text-gray-500">No content available</p>';
+        return;
+      }
+      
+      row.innerHTML = items.slice(0, 15).map((item, i) => {
+        const poster = item.poster_path ? `${IMG_BASE}/w342${item.poster_path}` : null;
+        const title = item.title || item.name || 'Unknown';
+        const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
+        const year = (item.release_date || item.first_air_date || '').split('-')[0] || '';
+        
+        return `
+          <div class="poster-card w-36 md:w-44 cursor-pointer group" onclick='openModal(${JSON.stringify(item).replace(/'/g, "&#39;")}, ${isTV})' style="animation-delay: ${i * 0.05}s">
+            <div class="relative rounded-xl overflow-hidden shadow-lg bg-gray-800">
+              ${poster ? `
+                <img src="${poster}" alt="${title}" loading="lazy" class="w-full h-52 md:h-64 object-cover"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="hidden w-full h-52 md:h-64 items-center justify-center bg-gradient-to-br from-gray-700 to-gray-900">
+                  <span class="text-4xl">🎬</span>
+                </div>
+              ` : `
+                <div class="w-full h-52 md:h-64 flex items-center justify-center bg-gradient-to-br from-gray-700 to-gray-900">
+                  <span class="text-4xl">🎬</span>
+                </div>
+              `}
+              <div class="absolute inset-0 poster-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
+                <h4 class="font-semibold text-sm line-clamp-2 mb-1">${title}</h4>
+                <div class="flex items-center gap-2 text-xs text-gray-300">
+                  <span class="text-yellow-400">★ ${rating}</span>
+                  ${year ? `<span>${year}</span>` : ''}
+                </div>
+                <div class="flex gap-2 mt-2">
+                  <button class="flex-1 py-1.5 bg-white text-black rounded font-medium text-xs hover:bg-gray-200 transition-colors">
+                    ▶ Play
+                  </button>
+                  <button class="w-8 h-8 rounded-full border border-gray-400 flex items-center justify-center text-xs hover:border-white transition-colors">
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Modal Functions
+    function openModal(item, isTV = false) {
+      const modal = document.getElementById('movieModal');
+      const backdrop = item.backdrop_path ? `${IMG_BASE}/w1280${item.backdrop_path}` : '';
+      
+      document.getElementById('modalBackdrop').style.backgroundImage = backdrop ? `url(${backdrop})` : 'linear-gradient(135deg, #1a1a2e, #16213e)';
+      document.getElementById('modalTitle').textContent = item.title || item.name || 'Unknown';
+      document.getElementById('modalMatch').textContent = `${Math.round((item.vote_average || 7) * 10)}% Match`;
+      document.getElementById('modalYear').textContent = (item.release_date || item.first_air_date || '').split('-')[0] || 'N/A';
+      document.getElementById('modalRating').textContent = isTV ? 'TV-MA' : 'U/A 16+';
+      document.getElementById('modalDesc').textContent = item.overview || 'No description available.';
+      
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+      document.getElementById('movieModal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Close modal on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+    
+    // Initialize app
+    initApp();
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cfb75b065fb3a31',t:'MTc3MTM5NjA1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
